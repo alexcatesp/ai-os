@@ -1,0 +1,14 @@
+# <device>        <mount>    <type>   <options>                                   <dump> <pass>
+# Rootfs (/) lo monta el kernel en solo lectura (root=... ro en la cmdline)
+/dev/mmcblk0p1    /boot      vfat     rw,sync,noatime,fmask=0177,dmask=0077       0      0
+/dev/mmcblk0p4    /data      ext4     rw,noatime,commit=30,errors=remount-ro      0      0
+proc              /proc      proc     defaults                                    0      0
+devpts            /dev/pts   devpts   defaults,gid=5,mode=620,ptmxmode=0666       0      0
+tmpfs             /dev/shm   tmpfs    mode=0777                                   0      0
+tmpfs             /tmp       tmpfs    mode=1777,size=64m                          0      0
+tmpfs             /run       tmpfs    mode=0755,nosuid,nodev                      0      0
+tmpfs             /var/log   tmpfs    mode=0755,size=16m                          0      0
+tmpfs             /var/lib   tmpfs    mode=0755,size=16m                          0      0
+tmpfs             /var/cache tmpfs    mode=0755,size=16m                          0      0
+tmpfs             /var/spool tmpfs    mode=0755,size=4m                           0      0
+sysfs             /sys       sysfs    defaults                                    0      0

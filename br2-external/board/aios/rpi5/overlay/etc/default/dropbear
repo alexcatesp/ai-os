@@ -1,0 +1,2 @@
+# -s: sin autenticacion por contrasena (solo clave publica)
+DROPBEAR_ARGS="-s"

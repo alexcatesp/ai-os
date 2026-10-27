@@ -1,0 +1,11 @@
+#!/bin/sh
+# Confirma el slot actual como bueno cuando el sistema lleva un rato sano.
+
+case "$1" in
+	start)
+		/usr/bin/aios-markgood >/dev/null 2>&1 &
+		;;
+	stop|restart|reload) ;;
+	*) echo "Uso: $0 {start|stop|restart}"; exit 1 ;;
+esac
+exit 0

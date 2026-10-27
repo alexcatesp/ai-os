@@ -1,0 +1,17 @@
+#!/bin/sh
+# Prepara la particion /data (persistente) antes de que arranque SSH.
+
+case "$1" in
+	start)
+		mkdir -p /data/config/dropbear /data/config/ssh /data/ota
+		chmod 700 /data/config/ssh
+		# Primera vez: sembrar las claves publicas incluidas en la imagen
+		if [ ! -s /data/config/ssh/authorized_keys ] && [ -f /etc/aios/authorized_keys ]; then
+			cp /etc/aios/authorized_keys /data/config/ssh/authorized_keys
+			chmod 600 /data/config/ssh/authorized_keys
+		fi
+		;;
+	stop|restart|reload) ;;
+	*) echo "Uso: $0 {start|stop|restart}"; exit 1 ;;
+esac
+exit 0

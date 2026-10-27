@@ -1,0 +1,66 @@
+name: release
+
+# Un tag vX.Y.Z publica una release estable; vX.Y.Z-algo (p. ej. v0.2.0-beta1) una pre-release.
+# El actualizador de la Pi solo sigue las releases estables ("latest").
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependencias de Buildroot
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential bc bison flex cpio file git libncurses-dev libssl-dev \
+            python3 rsync unzip wget xz-utils zstd libelf-dev
+
+      - name: Cache de descargas de Buildroot
+        uses: actions/cache@v4
+        with:
+          path: output/dl
+          key: br-dl-${{ hashFiles('br2-external/configs/aios_rpi5_defconfig', 'scripts/build.sh') }}
+          restore-keys: br-dl-
+
+      - name: Version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then v="${GITHUB_REF_NAME#v}"; else v="$(cat VERSION)-dev"; fi
+          echo "AIOS_VERSION=${v}" >> "$GITHUB_ENV"
+
+      - name: Compilar imagen
+        run: ./scripts/build.sh
+
+      - name: Firmar bundle OTA
+        env:
+          RAUC_SIGNING_KEY: ${{ secrets.RAUC_SIGNING_KEY }}
+        run: |
+          key="$(mktemp)"
+          printf '%s\n' "${RAUC_SIGNING_KEY}" > "${key}"
+          RAUC_KEY="${key}" RAUC_CERT="${PWD}/keys/ca.cert.pem" ./scripts/make-bundle.sh
+          shred -u "${key}"
+
+      - name: Preparar artefactos
+        run: |
+          cd output/images
+          xz -T0 -k sdcard.img
+          sha256sum "ai-os-${AIOS_VERSION}.raucb" sdcard.img.xz > SHA256SUMS
+
+      - name: Publicar release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
+          files: |
+            output/images/ai-os-*.raucb
+            output/images/sdcard.img.xz
+            output/images/SHA256SUMS

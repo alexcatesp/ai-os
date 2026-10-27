@@ -1,0 +1,5 @@
+# El firmware de la RPi5 carga U-Boot, y U-Boot arranca el kernel del slot activo.
+arm_64bit=1
+kernel=u-boot.bin
+enable_uart=1
+disable_overscan=1

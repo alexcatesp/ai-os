@@ -1,0 +1,25 @@
+#!/bin/sh
+# Marca el slot actual como bueno si el sistema esta sano tras un periodo de gracia.
+# Si falla, no se marca: el watchdog/reinicios agotan los intentos y U-Boot vuelve al slot anterior.
+# La red NO es criterio de salud (que alguien desenchufe el cable no debe provocar un rollback).
+
+GRACE=60
+sleep "$GRACE"
+
+fail() { echo "aios-markgood: $1 -> el slot NO se marca como bueno" >&2; exit 1; }
+
+# /data montado y escribible
+touch /data/.health 2>/dev/null || fail "/data no es escribible"
+rm -f /data/.health
+
+# SSH vivo
+pidof dropbear >/dev/null || fail "dropbear no esta en marcha"
+
+# RAUC responde
+rauc status >/dev/null 2>&1 || fail "rauc no responde"
+
+rauc status mark-good || fail "rauc status mark-good ha fallado"
+
+# Actualizacion confirmada: ya no estamos "intentando" ninguna version
+rm -f /data/ota/attempting
+echo "aios-markgood: slot confirmado como bueno"

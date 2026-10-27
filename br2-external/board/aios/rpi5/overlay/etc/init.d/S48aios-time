@@ -1,0 +1,17 @@
+#!/bin/sh
+# Sin RTC: sincroniza la hora por NTP (necesaria para TLS con GitHub).
+
+case "$1" in
+	start)
+		ntpd -p 0.pool.ntp.org -p 1.pool.ntp.org -p 2.pool.ntp.org
+		;;
+	stop)
+		killall ntpd 2>/dev/null
+		;;
+	restart|reload)
+		"$0" stop
+		"$0" start
+		;;
+	*) echo "Uso: $0 {start|stop|restart}"; exit 1 ;;
+esac
+exit 0

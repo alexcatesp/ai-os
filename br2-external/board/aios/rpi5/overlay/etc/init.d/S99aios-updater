@@ -1,0 +1,21 @@
+#!/bin/sh
+# Lanza el actualizador OTA en segundo plano.
+
+PIDFILE=/run/aios-updater.pid
+
+case "$1" in
+	start)
+		/usr/bin/aios-updater daemon >/dev/null 2>&1 &
+		echo $! > "$PIDFILE"
+		;;
+	stop)
+		[ -f "$PIDFILE" ] && kill "$(cat "$PIDFILE")" 2>/dev/null
+		rm -f "$PIDFILE"
+		;;
+	restart|reload)
+		"$0" stop
+		"$0" start
+		;;
+	*) echo "Uso: $0 {start|stop|restart}"; exit 1 ;;
+esac
+exit 0
