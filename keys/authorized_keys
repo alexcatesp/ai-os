@@ -1,2 +1,2 @@
-# Claves publicas SSH con acceso root a la Pi (una por linea). Pendiente: anadir la tuya.
-# Ejemplo: ssh-ed25519 AAAA... usuario@equipo
+# Claves publicas SSH con acceso root a la Pi (una por linea).
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIunjIogzqXhVjTKX5G+W/1UxYaqad30k3FnHnHIAYgg aleja@ai-os
