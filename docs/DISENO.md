@@ -58,7 +58,7 @@ Pi: aios-updater (cada 6 h + jitter) --> API releases/latest ----+
 
 ## Puntos sin validar en hardware (riesgos conocidos)
 
-El esqueleto **no se ha compilado ni probado todavía**. Hay que verificar en este orden:
+La imagen **compila en CI (v0.1.1) pero no se ha probado en hardware**. Hay que verificar en este orden:
 
 1. U-Boot `rpi_arm64` arranca en la RPi5 y el SD es `mmc 0` (si no, ajustar `boot.cmd`, `uboot.fragment`).
 2. `ttyAMA10` es la UART de depuración de la Pi 5 (no hace falta si solo se usa HDMI).

@@ -5,7 +5,7 @@ Sistema operativo mínimo (Linux + Buildroot) para **Raspberry Pi 5** que:
 - **No se corrompe si se corta la luz**: rootfs de solo lectura, el resto en RAM, una única partición de datos con journal.
 - **Se actualiza solo (OTA)**: la Pi consulta las releases de este repositorio, instala el bundle firmado en el slot inactivo (A/B) y reinicia. Si la nueva versión no arranca bien, vuelve sola a la anterior.
 
-> Estado: **esqueleto inicial (v0.1.0), aún sin compilar ni probar en hardware**. Ver [docs/DISENO.md](docs/DISENO.md) para el diseño y la lista de puntos por validar.
+> Estado: **v0.1.1 compila en CI y publica `sdcard.img.xz` y `.raucb` firmado; aún sin probar en hardware**. Ver [docs/DISENO.md](docs/DISENO.md) para el diseño y los puntos por validar.
 
 ## Estructura
 

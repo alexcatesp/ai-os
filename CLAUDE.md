@@ -26,4 +26,4 @@ SO para Raspberry Pi 5 basado en Buildroot: rootfs de solo lectura, A/B con RAUC
 
 ## Estado
 
-v0.1.0: esqueleto sin compilar ni probar en hardware; los riesgos pendientes de validar están listados en `docs/DISENO.md`. No afirmar que algo "funciona" hasta compilarlo en CI y probarlo en la Pi.
+v0.1.1: compila en CI (~1 h) y publica release; sin probar en hardware; los riesgos pendientes de validar están listados en `docs/DISENO.md`. No afirmar que algo "funciona" hasta compilarlo en CI y probarlo en la Pi.
